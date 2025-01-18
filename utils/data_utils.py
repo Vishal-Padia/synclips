@@ -85,9 +85,7 @@ class LipSyncDataset(Dataset):
         frame = Image.open(frame_path).convert("RGB")
 
         # load MFCCs
-        mfcc_path = frame_path.replace("cropped_face", "audio_features").replace(
-            ".jpg", ".npy"
-        )
+        mfcc_path = frame_path.split("cropped_faces")[0] + "audio_features\\mfcc.npy"
         mfcc = np.load(mfcc_path)
 
         # apply transformations
@@ -95,7 +93,7 @@ class LipSyncDataset(Dataset):
             frame = self.transform(frame)
 
         # conver to tensors
-        frame = torch.tenspr(np.array(frame), dtype=torch.float32).permute(
+        frame = torch.tensor(np.array(frame), dtype=torch.float32).permute(
             2, 0, 1
         )  # (C, H, W)
         mfcc = torch.tensor(mfcc, dtype=torch.float32)  # (n_mfcc, time_steps)
