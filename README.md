@@ -24,3 +24,7 @@ For evaluation I can use metrics like Lip Vertex Error (LVE) which measures the 
 - GPU: If I am not able to train the whole thing on the free-credits of Modal, then I can ask Akshat for more, if not provided then I'll need to pay.
 
 Hoping to complete this project within 2-3 weeks.
+
+## User Input
+
+First thought that came to my mind was taking was using a TTS model to generate a audio from the user's input text, this would work alright but the resulting video might look unnatural or mismatched with the speaker's identity. So after brainstorming solution with my best friends (claude and deepseek) they told we can use Voice Conversion (VC) or Voice Cloning model to map the generated TTS audio to the original speaker's voice. The working would be something like this *Use a pretrained TTS model* to generate audio from the input text then use a *speaker encoder* to extract speaker embeddings from the original audio, these will the speakers voice characteristics then use a *voice conversion model* to map the TTS generated audio to the target voice using the speaker embeddings, this will ensure that the generated audio sounds like the original speaker then *extract MFCCs* features from the converted audio and use them lip-syncing.
