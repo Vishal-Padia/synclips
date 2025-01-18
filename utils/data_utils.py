@@ -1,5 +1,10 @@
 import os
 import json
+import torch
+import numpy as np
+
+from PIL import Image
+from torch.utils.data import Dataset
 
 
 def load_alignments(align_path):
@@ -21,7 +26,7 @@ def load_alignments(align_path):
     return alignments
 
 
-def align_frames_and_audio(frame_dir, alignments, output_file, frame_rate=25):
+def align_frames_and_audio(frame_dir, alignments, output_file):
     """
     Align video frames with audio segments using alignment file.
 
@@ -29,7 +34,6 @@ def align_frames_and_audio(frame_dir, alignments, output_file, frame_rate=25):
     frame_dir (str): Directory containing the extracted frames
     alignments (list): List of (start_time, end_time, word) tuples
     output_file (str): Path to save the aligned data (json file)
-    frame_rate (int): Frame rate of the video
     """
     aligned_data = []
 
@@ -40,11 +44,10 @@ def align_frames_and_audio(frame_dir, alignments, output_file, frame_rate=25):
             print(f"Frame {frame_path} does not exist. Skipping.")
             continue
         frame_number = int(frame_file.split("_")[1].split(".")[0])
-        frame_time = frame_number / frame_rate
 
         # find the word corresponding to the frame's timestamp
         for start_time, end_time, word in alignments:
-            if start_time <= frame_time < end_time:
+            if start_time <= frame_number * 1000 < end_time:
                 aligned_data.append(
                     {
                         "frame_path": frame_path,
@@ -58,3 +61,43 @@ def align_frames_and_audio(frame_dir, alignments, output_file, frame_rate=25):
     # save the data to a json file
     with open(output_file, "w") as f:
         json.dump(aligned_data, f, indent=4)
+
+
+class LipSyncDataset(Dataset):
+    def __init__(self, aligned_data_file, transform=None):
+        """
+        Args:
+        aligned_data_file (str): Path to the aligned data json file
+        transform (callable, optional): Optional transform to be applied on a sample
+        """
+        with open(aligned_data_file, "r") as f:
+            self.aligned_data = json.load(f)
+
+        self.transform = transform
+
+    def __len__(self):
+        return len(self.aligned_data)
+
+    def __getitem__(self, idx):
+
+        # load frame
+        frame_path = self.aligned_data[idx]["frame_path"]
+        frame = Image.open(frame_path).convert("RGB")
+
+        # load MFCCs
+        mfcc_path = frame_path.replace("cropped_face", "audio_features").replace(
+            ".jpg", ".npy"
+        )
+        mfcc = np.load(mfcc_path)
+
+        # apply transformations
+        if self.transform:
+            frame = self.transform(frame)
+
+        # conver to tensors
+        frame = torch.tenspr(np.array(frame), dtype=torch.float32).permute(
+            2, 0, 1
+        )  # (C, H, W)
+        mfcc = torch.tensor(mfcc, dtype=torch.float32)  # (n_mfcc, time_steps)
+
+        return frame, mfcc
