@@ -172,4 +172,7 @@ cython_debug/
 
 # data folder
 data/raw
-data/preprocessed
+data/processed
+
+# playground directory
+playground/test
