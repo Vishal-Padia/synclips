@@ -3,7 +3,7 @@ import cv2
 
 import numpy as np
 
-from utils.face_utils import crop_face
+from utils.face_utils import crop_faces_concurrently
 from utils.audio_utils import extract_mfcc
 from utils.data_utils import load_alignments, align_frames_and_audio
 
@@ -79,11 +79,8 @@ def preprocess_speaker_data(speaker_dir, output_dir, frame_rate=10):
             video_path=video_path, output_dir=frame_dir, frame_rate=frame_rate
         )
 
-        # Cropping faces
-        for frame_file in os.listdir(frame_dir):
-            frame_path = os.path.join(frame_dir, frame_file)
-            cropped_face_path = os.path.join(cropped_face_dir, frame_file)
-            crop_face(image_path=frame_path, output_path=cropped_face_path)
+        # Cropping faces concurrently
+        crop_faces_concurrently(frame_dir=frame_dir, cropped_face_dir=cropped_face_dir)
 
         # Extracting MFCCs
         mfcc = extract_mfcc(audio_path=audio_path)
@@ -96,5 +93,4 @@ def preprocess_speaker_data(speaker_dir, output_dir, frame_rate=10):
             frame_dir=cropped_face_dir,
             alignments=alignments,
             output_file=aligned_data_file,
-            frame_rate=frame_rate,
         )
