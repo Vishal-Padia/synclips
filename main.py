@@ -10,7 +10,7 @@ def main():
     # iterate over all speakers
     for speaker in os.listdir(raw_data_dir):
         speaker_dir = os.path.join(raw_data_dir, speaker)
-        output_dir = os.path.join(processed_data_dir, speaker_dir)
+        output_dir = os.path.join(processed_data_dir, speaker)
 
         # preprocess data for this speaker
         print(f"Preprocessing data for {speaker}")
