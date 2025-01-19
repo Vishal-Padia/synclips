@@ -3,8 +3,20 @@ Trying to create a LipSync model
 
 # Why do I want to create this?
 
-There's a really cool startup called [sync.](https://sync.so/) and they are doing the same thing so the goal is to get hired by them (sound a little delusional but who cares right)
-And this seems like a really difficult project currently to me so I'll learn alot about computer vision too.
+There's a really cool startup called [sync.](https://sync.so/) and they are doing the same/simillar thing so the goal is to get hired by them or a better way to put this is to work on [sync.](https://sync.so) (sound a little delusional but who cares right).And this seems like a really difficult project currently to me so I'll learn alot about computer vision too.
+
+# How to run this?
+1. Download the data
+```bash
+python get_data.py --output_dir data/raw --num_speakers 34
+```
+ps: I am just using a subset of the gird corpus dataset (only 5 speakers because I have storage constraints lol)
+
+2. Run the Main file for preprocessing the raw data
+```bash
+python main.py
+```
+3. Training the Model (WIP)
 
 # How would I build it?
 
@@ -18,7 +30,7 @@ For evaluation I can use metrics like Lip Vertex Error (LVE) which measures the 
 
 # Some challenges I'll face
 
-- Lack of knowledge: I don't think I am "cracked" enough to build this alone, so I may take help from couple of cracked people from X or approach sync employees (heheheh), also I think this is just a *skill-issue* which I can easily overcome.
+- Lack of knowledge: I don't think I am "cracked" enough to build this alone, so I may take help from couple of cracked people from X or approach sync employees (heheheh), also I think this is just a **skill-issue** which I can easily overcome.
 - Lip-Sync Accuracy: Sync also doesn't have a 100% accurate model, so this will be a difficult part.
 - Realism: Generating natural-looking lip movements.
 - GPU: If I am not able to train the whole thing on the free-credits of Modal, then I can ask Akshat for more, if not provided then I'll need to pay.
@@ -27,4 +39,4 @@ Hoping to complete this project within 2-3 weeks.
 
 ## User Input
 
-First thought that came to my mind was taking was using a TTS model to generate a audio from the user's input text, this would work alright but the resulting video might look unnatural or mismatched with the speaker's identity. So after brainstorming solution with my best friends (claude and deepseek) they told we can use Voice Conversion (VC) or Voice Cloning model to map the generated TTS audio to the original speaker's voice. The working would be something like this *Use a pretrained TTS model* to generate audio from the input text then use a *speaker encoder* to extract speaker embeddings from the original audio, these will the speakers voice characteristics then use a *voice conversion model* to map the TTS generated audio to the target voice using the speaker embeddings, this will ensure that the generated audio sounds like the original speaker then *extract MFCCs* features from the converted audio and use them lip-syncing.
+First thought that came to my mind was taking was using a TTS model to generate a audio from the user's input text, this would work alright but the resulting video might look unnatural or mismatched with the speaker's identity. So after brainstorming solution with my best friends (claude and deepseek) they told we can use Voice Conversion (VC) or Voice Cloning model to map the generated TTS audio to the original speaker's voice. The working would be something like this **Use a pretrained TTS model** to generate audio from the input text then use a **speaker encoder** to extract speaker embeddings from the original audio, these will the speakers voice characteristics then use a **voice conversion model** to map the TTS generated audio to the target voice using the speaker embeddings, this will ensure that the generated audio sounds like the original speaker then **extract MFCCs** features from the converted audio and use them lip-syncing.
