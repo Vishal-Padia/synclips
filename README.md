@@ -10,7 +10,7 @@ There's a really cool startup called [sync.](https://sync.so/) and they are doin
 ```bash
 python get_data.py --output_dir data/raw --num_speakers 34
 ```
-ps: I am just using a subset of the gird corpus dataset (only 5 speakers because I have storage constraints lol)
+<s>ps: I am just using a subset of the gird corpus dataset (only 5 speakers because I have storage constraints lol)</s>
 
 2. Run the Main file for preprocessing the raw data
 ```bash
