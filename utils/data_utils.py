@@ -5,6 +5,7 @@ import numpy as np
 
 from PIL import Image
 from torch.utils.data import Dataset
+from torchvision.transforms import Resize
 
 
 def load_alignments(align_path):
@@ -64,7 +65,7 @@ def align_frames_and_audio(frame_dir, alignments, output_file):
 
 
 class LipSyncDataset(Dataset):
-    def __init__(self, aligned_data_file, transform=None):
+    def __init__(self, aligned_data_file, transform=None, resize_size=(32, 32)):
         """
         Args:
         aligned_data_file (str): Path to the aligned data json file
@@ -72,7 +73,7 @@ class LipSyncDataset(Dataset):
         """
         with open(aligned_data_file, "r") as f:
             self.aligned_data = json.load(f)
-
+        self.resize = Resize(resize_size)
         self.transform = transform
 
     def __len__(self):
@@ -87,6 +88,16 @@ class LipSyncDataset(Dataset):
         # load MFCCs
         mfcc_path = frame_path.split("cropped_faces")[0] + "audio_features\\mfcc.npy"
         mfcc = np.load(mfcc_path)
+
+        expected_n_mfcc = 13
+        if mfcc.shape[0] != expected_n_mfcc:
+            if mfcc.shape[0] < expected_n_mfcc:
+                # Pad with zeros
+                padding = np.zeros((expected_n_mfcc - mfcc.shape[0], mfcc.shape[1]))
+                mfcc = np.vstack((mfcc, padding))
+            else:
+                # Truncate
+                mfcc = mfcc[:expected_n_mfcc, :]
 
         # apply transformations
         if self.transform:
