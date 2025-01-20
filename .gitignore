@@ -176,3 +176,6 @@ data/processed
 
 # playground directory
 playground/test
+
+# wandb directory
+wandb/
