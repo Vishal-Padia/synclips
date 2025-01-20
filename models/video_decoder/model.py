@@ -10,7 +10,7 @@ class Generator(nn.Module):
             hidden_dim, hidden_dim // 2, kernel_size=4, stride=2, padding=1
         )
         self.conv2 = nn.ConvTranspose2d(
-            hidden_dim // 2, output_channels, kernel_size=4, stride=2, paddin=1
+            hidden_dim // 2, output_channels, kernel_size=4, stride=2, padding=1
         )
         self.relu = nn.ReLU()
         self.tanh = nn.Tanh()
