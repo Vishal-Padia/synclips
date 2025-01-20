@@ -3,7 +3,7 @@ import torch.nn as nn
 
 
 class VideoEncoder(nn.Module):
-    def __init__(self, input_channels, hidden_dim, output_dim):
+    def __init__(self, input_channels=3, hidden_dim=64, output_dim=128):
         super(VideoEncoder, self).__init__()
         self.conv1 = nn.Conv3d(
             input_channels, hidden_dim, kernel_size=(3, 3, 3), padding=(1, 1, 1)
@@ -18,12 +18,12 @@ class VideoEncoder(nn.Module):
         self.relu = nn.ReLU()
 
     def forward(self, x):
-        # x: (batch_size, channels, depth, height, width)
+        # x shape: (batch_size, channels, depth, height, width)
+        x = x.permute(0, 3, 2, 1, 4)
         x = self.relu(self.conv1(x))
         x = self.pool(x)
         x = self.relu(self.conv2(x))
         x = self.pool(x)
         x = self.relu(self.conv3(x))
         x = self.pool(x)
-
-        return x  # (batch_size, output_dim, depth` , height`, width`)
+        return x  # Output shape: (batch_size, output_dim, depth', height', width')
