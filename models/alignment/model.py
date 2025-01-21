@@ -10,21 +10,15 @@ class CrossAttention(nn.Module):
         self.cross_attention = nn.MultiheadAttention(hidden_dim, num_heads=num_heads)
 
     def forward(self, audio_features, video_features):
-        # audio_features: (batch_size, seq_len, audio_dim)
-        # video_features: (batch_size, seq_len, video_dim)
-        audio_proj = self.audio_proj(
-            audio_features
-        )  # (batch_size, seq_len, hidden_dim)
-        video_proj = self.video_proj(
-            video_features
-        )  # (batch_size, seq_len, hidden_dim)
+        # Project inputs to hidden_dim
+        audio_proj = self.audio_proj(audio_features)  # (batch, seq_a, hidden)
+        video_proj = self.video_proj(video_features)  # (batch, seq_v, hidden)
 
-        # CrossAttention
-        audio_proj = audio_proj.permute(1, 0, 2)  # (seq_len, batch_size, hidden_dim)
-        video_proj = video_proj.permute(1, 0, 2)  # (seq_len, batch_size, hidden_dim)
+        # Permute for MultiheadAttention
+        audio_proj = audio_proj.permute(1, 0, 2)  # (seq_a, batch, hidden)
+        video_proj = video_proj.permute(1, 0, 2)  # (seq_v, batch, hidden)
+
+        # Apply cross-attention
         aligned_audio, _ = self.cross_attention(audio_proj, video_proj, video_proj)
-        aligned_audio = aligned_audio.permute(
-            1, 0, 2
-        )  # (seq_len, batch_size, hidden_dim)
-
+        aligned_audio = aligned_audio.permute(1, 0, 2)  # (batch, seq_a, hidden)
         return aligned_audio
