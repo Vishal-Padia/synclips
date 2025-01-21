@@ -179,6 +179,3 @@ playground/test
 
 # wandb directory
 wandb/
-
-# output directory because it contains the model checkpoints
-outputs/
