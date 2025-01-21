@@ -77,7 +77,7 @@ Video Encoder: VideoEncoder(
 ```
 
 3. Alignment Module:
-```pyhon
+```python
 AlignmentModule: CrossAttention(
   (audio_proj): Linear(in_features=128, out_features=128, bias=True)
   (video_proj): Linear(in_features=128, out_features=128, bias=True)
