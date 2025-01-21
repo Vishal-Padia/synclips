@@ -14,11 +14,11 @@ def custom_collate_fn(batch):
     mfccs (torch.Tensor): Padded MFCCs tensor of shape (batch_size, time_steps, n_mfcc)
     """
     # Separate frames and MFCCs
-    frames = [item[0] for item in batch]  # Add depth dimension
+    frames = [item[0] for item in batch]  # Shape: [C, H, W]
     mfccs = [item[1].t() for item in batch]  # Transpose MFCC
 
     # Stack frames (they are already the same size)
-    frames_stacked = torch.stack(frames, dim=0)  # (batch_size, C, depth=1, H, W)
+    frames_stacked = torch.stack(frames, dim=0)  # (batch_size, C, H, W)
 
     # Pad MFCCs to the maximum length in the batch
     mfccs_padded = pad_sequence(mfccs, batch_first=True, padding_value=0)
