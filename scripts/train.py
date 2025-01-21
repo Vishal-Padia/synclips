@@ -94,11 +94,15 @@ for epoch in range(epochs):
         frames = frames.to(device)  # (batch_size, 3, 32, 32) after transform
         mfccs = mfccs.to(device)  # (batch_size, seq_len, 13)
 
+        # print(f"The size of the frames is {frames.shape}")
+
         # --- Video Preprocessing ---
         # Create video sequence: (batch, 3, 16, 32, 32)
         video_sequence = (
-            frames.unsqueeze(2).repeat(1, 1, 16, 1, 1).permute(0, 1, 2, 3, 4)
+            frames.unsqueeze(2).repeat(1, 1, 16, 1, 1).permute(0, 3, 2, 1, 4)
         )
+
+        # print(f"The size of framesafter creating a sequence is: {video_sequence.shape}")
 
         # --- Forward Pass ---
         # Audio features
