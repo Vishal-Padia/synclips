@@ -104,9 +104,7 @@ class LipSyncDataset(Dataset):
             frame = self.transform(frame)
 
         # conver to tensors
-        frame = torch.tensor(np.array(frame), dtype=torch.float32).permute(
-            2, 0, 1
-        )  # (C, H, W)
+        frame = torch.tensor(np.array(frame), dtype=torch.float32)
         mfcc = torch.tensor(mfcc, dtype=torch.float32)  # (n_mfcc, time_steps)
 
         return frame, mfcc
