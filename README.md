@@ -14,9 +14,18 @@ python get_data.py --output_dir data/raw --num_speakers 34
 
 2. Run the Main file for preprocessing the raw data
 ```bash
-python main.py
+python preprocessing.py
 ```
-3. Training the Model (WIP)
+3. Training the Model
+```bash
+python scripts/train.py
+```
+Once the training is complete, you should see the best model stored in `outputs/checkpoints` directory
+
+4. Run the Main file
+```bash
+python main.py --video_path /path/to/video.mp4 --text "Damn this is good, you're hired!!" --output_dir /path/to/output
+```
 
 # How would I build it?
 
