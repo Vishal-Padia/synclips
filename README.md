@@ -3,7 +3,10 @@ Trying to create a LipSync model
 
 # Why do I want to create this?
 
-There's a really cool startup called [sync.](https://sync.so/) and they are doing the same/simillar thing so the goal is to get hired by them or a better way to put this is to work on [sync.](https://sync.so) (sound a little delusional but who cares right).And this seems like a really difficult project currently to me so I'll learn alot about computer vision too.
+There's a really cool startup called [sync.](https://sync.so/) and they are doing the same/simillar thing so the goal is to get hired by them or a better way to put this is to work on [sync.](https://sync.so) (sounds a little delusional but who cares right). And this seems like a really difficult project currently to me so I'll learn alot about computer vision too.
+
+# Some Note:
+Due to being GPU Poor, I am not able to train the model for this project. I mailed Stephen from LambdaLabs and Akshat from Modal but it didn't got me anywhere I thought they would've provided me with the necessary compute (it was a long shot) for my project. I could've also paid for the compute but I am unemployed so don't want to use my savings here because I don't know how much more time will I be unemployed so paying 300-500 USD(estimated range considering I'll be training for 100 epochs that too on just 5 speakers data) didn't make sense to me sadly. Once I get a job, I'll definitly train the model, I'll be buying compute from LambdaLabs for sure.
 
 # How to run this?
 1. Download the data
@@ -113,3 +116,26 @@ Discriminator Model: Discriminator(
   (leaky_relu): LeakyReLU(negative_slope=0.2)
 )
 ```
+**AudioEncoder Architecture:** 
+This breaks down speech into small meaningful pieces. It takes audio and converts it into set of features, then transforms them into more richer and detailed representations.
+Transformer layer helps in connecting different parts of specch, understanding how words and sounds related to each other.
+---
+
+**VideoEncoder Architecture:**  
+It looks at the video frames and breaks them down layer-by-layer, capturing how things move and change. 
+The 3D-Convolutional layer helps understand where things are and how things are wrt to video.
+---
+
+**CrossAttention Architecture:**  
+This is where the synchronization happens. It helps in matching the lips movements with speech.
+It finds how specific sounds correspond to specific visual movements.
+---
+
+**Generator Architecture:**  
+This basically takes audio and video information and creates new, realistic video frames.
+It takes complex feature information and gradually builds more detailed images.
+---
+
+** Discriminator Architecture:**  
+This constantly compares the generated frames with the real ones.
+This is used to make sure that the quality of the generated video is good enough.
